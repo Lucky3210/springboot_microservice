@@ -22,7 +22,7 @@ public class OrderService {
 
 //    we inject the orderRepository into the service to enable saving to the db
     private final OrderRepository orderRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
     public void placeOrder(OrderRequest orderRequest){
 //        we create an object of type Order
         Order order = new Order();
@@ -53,8 +53,8 @@ public class OrderService {
         after introducing local variable we want to check if the result is true or not(available or not)
         if its available we save the order in the db
 */
-        InventoryResponse[] inventoryResponseArray = webClient.get()
-                .uri("http://localhost:8082/api/inventory",
+        InventoryResponse[] inventoryResponseArray = webClientBuilder.build().get()
+                .uri("http://inventory-service/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
                 .retrieve()
                 .bodyToMono(InventoryResponse[].class)
